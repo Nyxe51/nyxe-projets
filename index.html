@@ -101,10 +101,7 @@ h2{display:flex;align-items:center;gap:8px}h2 .ic{color:#7fd1b9}h2 .ic svg{width
 .welcome .logo{width:84px;height:84px;border-radius:24px;justify-self:start;margin-top:30px}
 .glass .lb{margin:14px 0 0}.glass input{margin-top:8px}.glass input[type=range]{margin-top:4px}
 
-:root{padding:0}
-html,body{height:100%;overflow:hidden;overscroll-behavior:none}
-body{position:fixed;inset:0;width:100%}
-main{position:fixed;inset:0;max-width:none;margin:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:calc(26px + env(safe-area-inset-top,0px)) max(16px,calc((100% - 640px)/2)) 140px}
+html{height:auto;overscroll-behavior-y:none}
 .rt{display:flex;gap:8px;align-items:center}
 .menub{width:46px;height:46px;min-height:46px;padding:0;border-radius:50%;background:#0c1110;border:1px solid var(--line);color:#e8efec;display:grid;place-items:center;flex:none}.menub .ic svg{width:22px;height:22px}
 .dov{justify-content:flex-end;align-items:stretch}
@@ -251,9 +248,10 @@ function settings(){
 function anim(){const go=()=>{document.querySelectorAll("[data-w]").forEach(i=>{i.style.width=i.dataset.w});const c=document.getElementById("rg");if(c)c.style.strokeDashoffset=c.dataset.o};if($("#v").classList.contains("still"))go();else requestAnimationFrame(()=>requestAnimationFrame(go))}
 function render(){
   const v=$("#v");v.textContent="";v.classList.toggle("still",!enter);enter=false;({home,proj:projects,stats})[tab](v);[...v.children].forEach((c,i)=>c.style.setProperty("--i",i));anim();
-  const t=$("#tabs");t.textContent="";[["home","Accueil"],["proj","Projets"],["stats","Stats"]].forEach(([k,l])=>{const b=el("button","tab"+(k===tab?" on":""));b.innerHTML='<svg viewBox="0 0 24 24"><path d="'+IC[k]+'"/></svg>';b.append(el("span","",l));b.onclick=()=>{tab=k;enter=true;render();$("#v").scrollTop=0};t.append(b)});
+  const t=$("#tabs");t.textContent="";[["home","Accueil"],["proj","Projets"],["stats","Stats"]].forEach(([k,l])=>{const b=el("button","tab"+(k===tab?" on":""));b.innerHTML='<svg viewBox="0 0 24 24"><path d="'+IC[k]+'"/></svg>';b.append(el("span","",l));b.onclick=()=>{tab=k;enter=true;render();scrollTo(0,0)};t.append(b)});
 }
 try{const l=JSON.parse(localStorage.getItem(KEY)||"[]");if(Array.isArray(l))list=l}catch(e){}
+const fixH=()=>{const h=Math.max(screen.height||0,screen.width||0)+2+"px";document.documentElement.style.minHeight=h;document.body.style.minHeight=h};fixH();
 try{pseudo=localStorage.getItem(NK)||""}catch(e){}
 render();if(!pseudo)welcome();
 if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)navigator.serviceWorker.register("sw.js").catch(()=>{});
